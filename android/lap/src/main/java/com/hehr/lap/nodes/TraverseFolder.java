@@ -7,6 +7,10 @@ import com.hehr.lap.Error;
 
 import java.io.File;
 
+/**
+ * @author hehr
+ * 文件扫描节点
+ */
 public class TraverseFolder extends BaseNode<Bundle> {
 
     private String path;

@@ -1,0 +1,50 @@
+ext {
+    asversion = project.hasProperty('asversion') ? asversion : "1.0.0"
+}
+
+// 3. 拷贝aar
+task pack(type: Zip) {
+
+    tasks.getByName("assemble").doLast {
+        def targetName = "lap-v" + project.ext.asversion + "-"+ getTime() + "-release"
+
+        copy {
+            println "------------拷贝 aar-------------"
+            delete 'tmp'
+            delete 'out'
+            from 'build/outputs/aar/lap-release.aar'
+            into 'tmp'
+            rename {
+                targetName + ".aar"
+            }
+        }
+
+        copy {
+            println "------------拷贝 README.md-------------"
+            from '../README.md'
+            into 'tmp'
+        }
+
+
+        archiveName targetName + ".zip"
+        println "------------zip 打包：" + archiveName
+        extension 'zip'
+        from 'tmp'
+        destinationDir(new File('out'))
+
+
+    }
+
+
+}
+// 2. 打包
+pack.dependsOn assemble
+
+def getTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHH')
+    return formattedDate
+}
+
+
+
