@@ -1,13 +1,11 @@
 package com.hehr.lap;
 
-import android.support.annotation.Keep;
-
 /**
  * @author hehr
  *
  */
 
-@Keep
+
 public class Error {
 
 
@@ -15,7 +13,7 @@ public class Error {
      * Defined error here
      *
      */
-    @Keep
+
    public enum ERROR {
 
         /**
@@ -39,56 +37,6 @@ public class Error {
         FFMAR_PARSE_ILLEGAL_ARGUMENT_ERROR(1004 , "FFMARTask task IllegalArgumentException"),
 
         /**
-         *
-         */
-        FFMAR_TASK_INTRRRUPTED_EXCEPTION_ERROR(1005 , "FFMARTask task InterruptedException"),
-
-        /**
-         *
-         */
-        FFMAR_TASK_EXECUTION_EXCEPTION_ERROR(1006 , "FFMARTask ExecutionException"),
-
-        /**
-         *
-         */
-        CREATE_CACHE_FROM_DB_TASK_INTRRRUPTED_EXCEPTION_ERROR(1007 , "CreateCacheFromDBTask  InterruptedException"),
-
-        /**
-         *
-         */
-        CREATE_CACHE_FROM_DB_TASK_EXECUTION_EXCEPTION_ERROR(1008 , "CreateCacheFromDBTask  ExecutionException"),
-
-        /**
-         *
-         */
-        UPDATE_DB_TASK_INTRRRUPTED_EXCEPTION_ERROR(1009 , "UpdateDBTask InterruptedException"),
-
-        /**
-         *
-         */
-        UPDATE_DB_TASK_EXECUTION_EXCEPTION_ERROR(1010 , "UpdateDBTask  ExecutionException"),
-
-        /**
-         *
-         */
-        QUERY_DB_TASK_INTRRRUPTED_EXCEPTION_ERROR(1011 , "QueryDBTask  InterruptedException"),
-
-        /**
-         *
-         */
-        QUERY_DB_TASK_EXECUTION_EXCEPTION_ERROR(1012 , "QueryDBTask  ExecutionException"),
-
-        /**
-         *
-         */
-        TOKENIZE_TASK_INTRRRUPTED_EXCEPTION_ERROR(1013 , "TokenizeTask  InterruptedException"),
-
-        /**
-         *
-         */
-        TOKENIZE_TASK_EXECUTION_EXCEPTION_ERROR(1014 , "TokenizeTask  ExecutionException"),
-
-        /**
          * 初始化 数据库文件拷贝IO异常
          */
         INIT_DB_COPY_IO_EXCEPTION_ERROR(1015,"copy encrypted.db IOException"),
@@ -103,12 +51,15 @@ public class Error {
          */
         EXECUTOR_SERVICE_SHUTDOWN_EXCEPTION_ERROR(1017,"ExecutorServiceShutdownException"),
 
-        COPY_DB_FROM_ASSET_TASK_INTRRRUPTED_EXCEPTION_ERROR(1018, "CopyDBFromAssetTask  InterruptedException"),
+        /**
+         *
+         */
+        TASK_INTRRRUPTED_EXCEPTION_ERROR(1018, " InterruptedException"),
 
         /**
          *
          */
-        COPY_DB_FROM_ASSET_TASK_EXECUTION_EXCEPTION_ERROR(1019 , "CopyDBFromAssetTask  ExecutionException"),
+        TASK_EXECUTION_EXCEPTION_ERROR(1019 , "ExecutionException"),
 
 
         ;
@@ -144,13 +95,13 @@ public class Error {
     private int code;
 
 
-    @Keep
+
     private Error(Builder builder) {
 
         this(builder.code,builder.desc);
 
     }
-    @Keep
+
     private Error(int code , String desc) {
 
         setCode(code);
@@ -158,21 +109,21 @@ public class Error {
         setDesc(desc);
 
     }
-    @Keep
+
     public String getDesc() { return desc; }
-    @Keep
+
     public void setDesc(String desc) {
         this.desc = desc;
     }
-    @Keep
+
     public int getCode() {
         return code;
     }
-    @Keep
+
     public void setCode(int code) {
         this.code = code;
     }
-    @Keep
+
     public static class Builder{
 
         private int code;
@@ -193,7 +144,7 @@ public class Error {
     }
 
     @Override
-    @Keep
+
     public String toString() {
         return "code : " + this.getCode() + ",desc : " + this.getDesc();
     }

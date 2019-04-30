@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.hehr.lap.bean.Metadata;
 import com.hehr.lap.bean.ScannerBean;
-import com.hehr.lap.task.TaskFactory;
+import com.hehr.lap.nodes.TaskFactory;
 import com.hehr.lap.utils.db.DBManager;
 
 import java.util.ArrayList;

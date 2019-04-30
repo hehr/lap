@@ -1,14 +1,18 @@
 package com.hehr.lap.nodes;
 
-import com.hehr.lap.Bundle;
-import com.hehr.lap.task.OptDataFromDBTask;
-import com.hehr.lap.task.TaskFactory;
+import android.database.Cursor;
 
+import com.hehr.lap.Bundle;
+import com.hehr.lap.Conf;
+import com.hehr.lap.bean.Metadata;
+import com.hehr.lap.bean.ScannerBean;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
  * 直接从数据库中获取数据
- *
  */
 public class OptDB extends BaseNode {
 
@@ -40,11 +44,11 @@ public class OptDB extends BaseNode {
         this.isDesc = isDesc;
     }
 
-    private OptDB(Builder builder){
-        this(builder.getLimit(),builder.isDesc());
+    private OptDB(Builder builder) {
+        this(builder.getLimit(), builder.isDesc());
     }
 
-    public static class Builder{
+    public static class Builder {
         private int limit;
         private boolean isDesc;
 
@@ -66,7 +70,7 @@ public class OptDB extends BaseNode {
             return this;
         }
 
-        public OptDB build(){
+        public OptDB build() {
             return new OptDB(this);
         }
     }
@@ -77,25 +81,15 @@ public class OptDB extends BaseNode {
     }
 
     @Override
-    public Bundle doWork(Bundle bundle) {
+    public Bundle doWork(Bundle bundle) throws InterruptedException, ExecutionException, TaskFactory.ExecutorServiceShutdownException {
 
-        try {
-            bundle = bundle.getTaskFactory().getExecutor().submit(
-                    new OptDataFromDBTask(
-                            bundle ,
-                            getLimit(),
-                            isDesc()
-                    )
-            ).get();
-        } catch (TaskFactory.ExecutorServiceShutdownException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        return bundle;
+        return bundle.getTaskFactory().getExecutor().submit(
+                new OptDataFromDBTask(
+                        bundle,
+                        getLimit(),
+                        isDesc()
+                )
+        ).get();
     }
 
     @Override
@@ -103,4 +97,70 @@ public class OptDB extends BaseNode {
         //查询数据后直接返回，无后续节点
         return false;
     }
+
+
+    class OptDataFromDBTask extends BaseTask {
+
+        private int limit;
+
+        private boolean isDesc;
+
+        public OptDataFromDBTask(Bundle bundle, int limit, boolean isDesc) {
+            super(bundle);
+            this.limit = limit;
+            this.isDesc = isDesc;
+        }
+
+
+        @Override
+        public Bundle call() throws Exception {
+
+            String[] columns = {Conf.ScannerDB.METADATA_COLUMN_FILE_NAME, Conf.ScannerDB.METADATA_COLUMN_ARTIST, Conf.ScannerDB.METADATA_COLUMN_TITLE};
+
+            Cursor cursor = bundle.getDbManager().queryData(
+                    Conf.ScannerDB.TABLE_METADATA_NAME,
+                    columns,
+                    null,
+                    null,
+                    null,
+                    null,
+                    isDesc ? "id desc" : null,
+                    String.valueOf(limit)
+            );
+
+            Metadata data;
+
+            List<ScannerBean> lstSb = new ArrayList<>();
+
+            while (cursor != null
+                    && cursor.getCount() > 0
+                    && cursor.moveToNext()
+                    && bundle.getCache().size() <= Conf.CACHE_SIZE
+            ) {
+
+                data = new Metadata();
+
+                String absolutePath = cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_FILE_NAME));
+
+
+                data.setArtist(cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_ARTIST)));
+                data.setTitle(cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_TITLE)));
+
+                lstSb.add(new ScannerBean.Builder()
+                        .setMetadata(data)
+                        .setAbsolutePath(absolutePath)
+                        .build());
+            }
+
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+
+            bundle.setList(lstSb);
+
+            return bundle;
+        }
+    }
+
+
 }

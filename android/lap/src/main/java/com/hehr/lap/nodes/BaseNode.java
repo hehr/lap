@@ -3,22 +3,23 @@ package com.hehr.lap.nodes;
 
 import com.hehr.lap.Bundle;
 
+import java.util.concurrent.ExecutionException;
+
 /**
- * @author hehr
  * @param <T>
+ * @author hehr
  */
-public abstract class BaseNode<T extends Bundle>  {
+public abstract class BaseNode<T extends Bundle> {
 
     /**
      * 在此处申明责任链上每一个节点的名称,
-     *
-    */
+     */
     public static class Name {
 
         /**
          * 文件遍历节点
          */
-        public final static String  TRAVERSE_FOLDER = "TRAVERSE_FOLDER";
+        public final static String TRAVERSE_FOLDER = "TRAVERSE_FOLDER";
 
         /**
          * 缓存查询节点
@@ -34,11 +35,6 @@ public abstract class BaseNode<T extends Bundle>  {
          * 分词节点
          */
         public final static String TOKENIZE = "TOKENIZE";
-
-        /**
-         * 歌手名信息区分节点
-         */
-        public final static String CONFIRM_SINGER = "CONFIRM_SINGER";
 
         /**
          * 创建缓存节点
@@ -74,21 +70,27 @@ public abstract class BaseNode<T extends Bundle>  {
 
     /**
      * 设置节点名称
+     *
      * @return
      */
     public abstract String getName();
 
     /**
      * 完成自己部分功课
+     *
      * @param t
      * @return T
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws TaskFactory.ExecutorServiceShutdownException
      */
-    public abstract T doWork(T t);
+    public abstract T doWork(T t) throws InterruptedException, ExecutionException, TaskFactory.ExecutorServiceShutdownException;
 
 
     /**
      * 允许任何一个节点在完成自己任务之后直接跳出整个责任链
      *
+     * @param t
      * @return
      */
     public abstract boolean hasNext(T t);

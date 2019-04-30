@@ -3,8 +3,8 @@ package com.hehr.lap.nodes;
 import android.text.TextUtils;
 
 import com.hehr.lap.Bundle;
-import com.hehr.lap.bean.ScannerBean;
 import com.hehr.lap.Error;
+import com.hehr.lap.bean.ScannerBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +83,7 @@ public class Trans extends BaseNode<Bundle> {
                     //文件后缀名
                     String suffix = name.substring(name.lastIndexOf(".") + 1);
                     //去除文件后缀名的文件名
-                    String nameWithOutSuffix = name.substring(0, name.lastIndexOf(".") );
+                    String nameWithOutSuffix = name.substring(0, name.lastIndexOf("."));
                     builder.setFileNameWithSuffix(name);
                     builder.setFileNameWithOutSuffix(nameWithOutSuffix);
                     builder.setSuffix(suffix);

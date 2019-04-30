@@ -1,7 +1,6 @@
 package com.hehr.lap;
 
 import android.content.Context;
-import android.support.annotation.Keep;
 import android.text.TextUtils;
 
 import com.hehr.lap.bean.AudioBean;
@@ -18,11 +17,11 @@ import com.hehr.lap.nodes.OptDB;
 import com.hehr.lap.nodes.ParseAudio;
 import com.hehr.lap.nodes.QueryCache;
 import com.hehr.lap.nodes.QueryDB;
+import com.hehr.lap.nodes.TaskFactory;
 import com.hehr.lap.nodes.Tokenize;
 import com.hehr.lap.nodes.Trans;
 import com.hehr.lap.nodes.TraverseFolder;
 import com.hehr.lap.nodes.UpdateDB;
-import com.hehr.lap.task.TaskFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +33,6 @@ import java.util.Set;
  * 该版本为单线程模型，不支持多线程并发解析
  *
  */
-@Keep
 public class Engine {
 
     private Engine(){}
@@ -54,7 +52,6 @@ public class Engine {
      * @param context
      * @param listener
      */
-    @Keep
     public void initialize(Context context , InitializeListener listener){
 
         mInitializeListener = listener;
@@ -128,7 +125,6 @@ public class Engine {
      * @param folderPath
      * @param listener
      */
-    @Keep
     public void scan(String folderPath , ScanListener listener){
 
         mScanListener = listener;
@@ -160,7 +156,6 @@ public class Engine {
      * @param list
      * @param listener
      */
-    @Keep
     public void scan(List<String> list ,ScanListener listener){
 
         mScanListener = listener;
@@ -189,7 +184,7 @@ public class Engine {
      * @param limit 查询最大条目数限制,0<limit<1000
      *
      */
-    @Keep
+
     public void optDB(int limit, boolean isDesc, QueryListener listener){
 
         mQueryListener = listener;
@@ -238,7 +233,7 @@ public class Engine {
      * 设置扫描条目限制
      * @param number
      */
-    @Keep
+
     public void setEntryNumber(int number){
         Conf.setEntryNumber(number);
     }
@@ -247,7 +242,7 @@ public class Engine {
      * 默认值 200 取值范围 0-500
      * @param size
      */
-    @Keep
+
     public void setCacheSize(int size){
         Conf.setCacheSize(size<=0?0:size>=500?500:size);
     }
@@ -256,7 +251,7 @@ public class Engine {
      * 设置扫描过滤文件限制大小
      *
      */
-    @Keep
+
     public void setAudioSize(int limit){
         Conf.setAudioSizeLimit(limit);
     }
@@ -264,7 +259,7 @@ public class Engine {
     /**
      * 添加滤音乐文件类型
      */
-    @Keep
+
     public void addAudioType(String type){
         Conf.AUDIO_TYPE.add(type);
     }
@@ -274,7 +269,6 @@ public class Engine {
      * 在此方法中销毁线程池资源和数据库连接资源，
      * 此方法调用后必须重新调用 Initialize
      */
-    @Keep
     public void release(){
 
         if(bundle != null){
@@ -291,7 +285,7 @@ public class Engine {
      * 模块是否初始化完成
      * @return
      */
-    @Keep
+
     public boolean isInitialized(){
         return bundle==null?false:bundle.isInitialize();
     }

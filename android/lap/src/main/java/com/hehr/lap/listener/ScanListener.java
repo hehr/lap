@@ -1,9 +1,8 @@
 package com.hehr.lap.listener;
 
-import android.support.annotation.Keep;
 
-import com.hehr.lap.bean.AudioBean;
 import com.hehr.lap.Error;
+import com.hehr.lap.bean.AudioBean;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * 引擎扫描监听器
  *
  */
-@Keep
+
 public interface ScanListener {
 
     /**

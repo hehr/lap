@@ -1,7 +1,7 @@
 package com.hehr.lap.listener;
 
-import com.hehr.lap.bean.ScannerBean;
 import com.hehr.lap.Error;
+import com.hehr.lap.bean.ScannerBean;
 
 import java.util.List;
 
