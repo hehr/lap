@@ -1,4 +1,4 @@
-package com.hehr.lap.task;
+package com.hehr.lap.nodes;
 
 import android.util.Log;
 
@@ -6,11 +6,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * @author hehr 
+ * @author hehr
  */
 public class TaskFactory {
 
-    private static final String TAG = TaskFactory.class.getSimpleName() ;
+    private static final String TAG = TaskFactory.class.getSimpleName();
 
     private ExecutorService executorService = null;
 
@@ -22,32 +22,28 @@ public class TaskFactory {
 
     /**
      * 在ExecutorService shut down状态提交任务抛出此异常
-     *
      */
-    public class ExecutorServiceShutdownException extends Exception{
+    public class ExecutorServiceShutdownException extends Exception {
         public ExecutorServiceShutdownException(String message) {
             super(message);
         }
     }
 
     /**
-     *
      * @return
      */
     public ExecutorService getExecutor() throws ExecutorServiceShutdownException {
 
-        if(!executorService.isShutdown()){
+        if (!executorService.isShutdown()) {
 
             return executorService;
 
-        }else {
-            Log.e(TAG , "executorService is isShutdown ,can not getExecutorService !");
+        } else {
+            Log.e(TAG, "executorService is isShutdown ,can not getExecutorService !");
             throw new ExecutorServiceShutdownException("ExecutorServiceShutdownException");
         }
 
     }
-
-
 
 
     /**
@@ -55,15 +51,12 @@ public class TaskFactory {
      */
     public void destroy() {
 
-        if(executorService !=null && !executorService.isShutdown()){
+        if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdownNow();
         }
 
         executorService = null;
 
     }
-
-    //todo add other threadCachePool operate  method
-
 
 }

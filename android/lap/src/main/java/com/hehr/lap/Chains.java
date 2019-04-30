@@ -5,10 +5,11 @@ import android.util.Log;
 import com.hehr.lap.bean.ScannerBean;
 import com.hehr.lap.listener.ChainsListener;
 import com.hehr.lap.nodes.BaseNode;
-
+import com.hehr.lap.nodes.TaskFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * DESIGN:
@@ -52,7 +53,27 @@ public class Chains {
 
             Log.i(TAG , "next nodes : " + node.getName());
 
-            bundle = node.doWork(bundle);
+            try {
+                bundle = node.doWork(bundle);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                bundle.setError(new Error.Builder()
+                        .setCode(Error.ERROR.TASK_INTRRRUPTED_EXCEPTION_ERROR.getCode())
+                        .setDesc(Error.ERROR.TASK_INTRRRUPTED_EXCEPTION_ERROR.getDesc())
+                        .build());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                bundle.setError(new Error.Builder()
+                        .setCode(Error.ERROR.TASK_EXECUTION_EXCEPTION_ERROR.getCode())
+                        .setDesc(Error.ERROR.TASK_EXECUTION_EXCEPTION_ERROR.getDesc())
+                        .build());
+            } catch (TaskFactory.ExecutorServiceShutdownException e) {
+                e.printStackTrace();
+                bundle.setError(new Error.Builder()
+                        .setCode(Error.ERROR.EXECUTOR_SERVICE_SHUTDOWN_EXCEPTION_ERROR.getCode())
+                        .setDesc(Error.ERROR.EXECUTOR_SERVICE_SHUTDOWN_EXCEPTION_ERROR.getDesc())
+                        .build());
+            }
 
             if (bundle.hasError() || ! node.hasNext(bundle)) {
                 jump(bundle,listener);return;

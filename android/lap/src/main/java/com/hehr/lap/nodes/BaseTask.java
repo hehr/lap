@@ -1,5 +1,4 @@
-package com.hehr.lap.task;
-
+package com.hehr.lap.nodes;
 
 
 import com.hehr.lap.Bundle;
@@ -7,14 +6,13 @@ import com.hehr.lap.Bundle;
 import java.util.concurrent.Callable;
 
 /**
- *
  * @author hehr
  */
-public abstract class BaseTask implements Callable<Bundle>{
+public abstract class BaseTask implements Callable<Bundle> {
 
     public Bundle bundle;
 
-    public BaseTask(Bundle bundle){
+    public BaseTask(Bundle bundle) {
         this.bundle = bundle;
     }
 

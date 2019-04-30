@@ -1,13 +1,12 @@
 package com.hehr.lap.listener;
 
-import android.support.annotation.Keep;
 import com.hehr.lap.Error;
 
 /**
  * 引擎初始化监听器
  *
  */
-@Keep
+
 public interface InitializeListener {
 
     /**
