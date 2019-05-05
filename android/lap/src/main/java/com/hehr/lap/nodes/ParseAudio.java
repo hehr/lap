@@ -16,8 +16,7 @@ import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class ParseAudio extends BaseNode<Bundle> {
 
-    private ParseAudio(Builder builder) {
-    }
+    private ParseAudio(Builder builder) {}
 
     @Override
     public String getName() {
