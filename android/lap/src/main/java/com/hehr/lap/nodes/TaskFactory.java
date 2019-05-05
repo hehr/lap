@@ -33,16 +33,12 @@ public class TaskFactory {
      * @return
      */
     public ExecutorService getExecutor() throws ExecutorServiceShutdownException {
-
         if (!executorService.isShutdown()) {
-
             return executorService;
-
         } else {
             Log.e(TAG, "executorService is isShutdown ,can not getExecutorService !");
             throw new ExecutorServiceShutdownException("ExecutorServiceShutdownException");
         }
-
     }
 
 
@@ -50,13 +46,10 @@ public class TaskFactory {
      * 销毁线程池资源
      */
     public void destroy() {
-
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdownNow();
         }
-
         executorService = null;
-
     }
 
 }
