@@ -4,15 +4,17 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hehr.lap.bean.AudioBean;
 import com.hehr.lap.bean.Metadata;
 import com.hehr.lap.bean.ScannerBean;
 import com.hehr.lap.nodes.TaskFactory;
 import com.hehr.lap.utils.db.DBManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
+import java.util.Set;
 
 public class Bundle {
 
@@ -21,9 +23,6 @@ public class Bundle {
     private List<ScannerBean> list;
 
     private Error error;
-
-    //数据缓存
-    public Queue<ScannerBean> cache;
 
     private Context appContext;
 
@@ -48,14 +47,6 @@ public class Bundle {
 
     public void setDbManager(DBManager dbManager) {
         this.dbManager = dbManager;
-    }
-
-    public Queue<ScannerBean> getCache() {
-        return cache;
-    }
-
-    public void setCache(Queue<ScannerBean> cache) {
-        this.cache = cache;
     }
 
     public Context getAppContext() {
@@ -143,31 +134,6 @@ public class Bundle {
     }
 
     /**
-     * 更新缓存数据
-     */
-    public void updateCache() {
-
-
-
-        for (int i = 0; Conf.CACHE_SIZE > 0 && getList() != null&& i < getList().size(); i++) {
-
-            ScannerBean bean = getList().get(i);
-
-            if (!bean.isEffect()) {
-                continue;
-            }
-
-            if (getCache().size() >= Conf.CACHE_SIZE) {
-                getCache().poll();
-            }
-
-            getCache().offer(bean);
-
-        }
-        Log.i(TAG, "update cache , current cache size  " + getCache().size());
-    }
-
-    /**
      * 销毁bundle内所有数据
      */
     public void release(){
@@ -182,15 +148,55 @@ public class Bundle {
             getTaskFactory().destroy();
         }
 
-        //释放缓存
-        while (getCache()!= null && getCache().size()>0){
-            getCache().poll();
-        }
-
         this.list = null;
 
         setInitialize(false);
 
+    }
+
+    /**
+     *
+     * scannerBean to AudioBean
+     * @param list
+     * @return
+     */
+    public List<AudioBean> transToAudio(List<ScannerBean> list) {
+
+        List<AudioBean> audioList = new ArrayList<>();
+
+        for (ScannerBean sb : list) {
+            AudioBean item = new AudioBean();
+            if (!TextUtils.isEmpty(sb.getAbsolutePath())) {
+                item.setPath(sb.getAbsolutePath());
+            } else {
+                item.setName(sb.getFileNameWithOutSuffix());
+            }
+            Set title = new HashSet();
+            Set artist = new HashSet();
+            if (sb.getMetadata().getExtra() != null
+                    && sb.getMetadata().getExtra().size() != 0) {
+                for (Metadata extraMata : sb.getMetadata().getExtra()) {
+                    if (!TextUtils.isEmpty(extraMata.getTitle())) {
+                        title.add(extraMata.getTitle());
+                    }
+                    if (!TextUtils.isEmpty(extraMata.getArtist())) {
+                        artist.add(extraMata.getArtist());
+                    }
+                }
+            } else {
+                if (!TextUtils.isEmpty(sb.getMetadata().getTitle())) {
+                    title.add(sb.getMetadata().getTitle());
+                }
+                if (!TextUtils.isEmpty(sb.getMetadata().getArtist())) {
+                    artist.add(sb.getMetadata().getArtist());
+                }
+            }
+            item.setSong(title.iterator().hasNext()? title.iterator().next().toString():"");
+            item.setSinger(artist.iterator().hasNext()? artist.iterator().next().toString():"");
+            audioList.add(item);
+        }
+
+        return audioList;
     }
 
 }

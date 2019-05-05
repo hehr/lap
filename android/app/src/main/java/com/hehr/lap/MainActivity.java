@@ -46,6 +46,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         editText = (EditText)findViewById(R.id.editText);
 
 
+        Engine.getInstance().setEntryNumber(500);
+
         Engine.getInstance().initialize(this, new InitializeListener() {
             @Override
             public void onError(Error error) {
@@ -58,16 +60,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         });
 
-
-
         scanDefaultPath.setOnClickListener(this);
-
 
     }
 
 
     private static final String SD_CARD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-
 
     @Override
     public void onClick(View v) {

@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.hehr.lap.Bundle;
 import com.hehr.lap.Conf;
-import com.hehr.lap.bean.ScannerBean;
+import com.hehr.lap.bean.AudioBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 更新数据库节点
+ * @author hehr
  */
 public class UpdateDB extends BaseNode {
 
@@ -36,9 +37,6 @@ public class UpdateDB extends BaseNode {
     @Override
     public Bundle doWork(Bundle bundle) throws TaskFactory.ExecutorServiceShutdownException, ExecutionException, InterruptedException {
 
-        //bundle中仍然没有解析出来metaDada数据项给丢掉
-        bundle.removeInvalid();
-
         return bundle.getTaskFactory().getExecutor().submit(
                 new UpdateDBTask(bundle))
                 .get();
@@ -47,7 +45,7 @@ public class UpdateDB extends BaseNode {
 
     @Override
     public boolean hasNext(Bundle bundle) {
-        return true; //更新完数据库之后还需更新缓存
+        return false;
     }
 
 
@@ -58,26 +56,23 @@ public class UpdateDB extends BaseNode {
         }
 
         @Override
-        public Bundle call() throws Exception {
+        public Bundle call() {
 
             List<ContentValues> values = new ArrayList<ContentValues>();
 
-            for (ScannerBean bean : bundle.getList()) {
+
+            List<AudioBean> lst = bundle.transToAudio(bundle.getList());
+
+            for (AudioBean bean : lst) {
 
                 //数据库中只保存含有绝对路径且被成功解析过的数据
-                if (TextUtils.isEmpty(bean.getAbsolutePath())
-                        || TextUtils.isEmpty(bean.getMetadata().getArtist())
-                        || TextUtils.isEmpty(bean.getMetadata().getTitle())
-                        || bean.getMetadata().getExtra() != null && !bean.getMetadata().getExtra().isEmpty() //含有多个歌手名信息的也不保存
-                ) {
-                    continue;
-                }
+                if (TextUtils.isEmpty(bean.getPath()))  continue;
 
                 ContentValues value = new ContentValues();
 
-                value.put(Conf.ScannerDB.METADATA_COLUMN_FILE_NAME, bean.getAbsolutePath());
-                value.put(Conf.ScannerDB.METADATA_COLUMN_ARTIST, bean.getMetadata().getArtist());
-                value.put(Conf.ScannerDB.METADATA_COLUMN_TITLE, bean.getMetadata().getTitle());
+                value.put(Conf.ScannerDB.METADATA_COLUMN_FILE_NAME, bean.getPath());
+                value.put(Conf.ScannerDB.METADATA_COLUMN_ARTIST, bean.getSinger());
+                value.put(Conf.ScannerDB.METADATA_COLUMN_TITLE, bean.getSong());
 
                 values.add(value);
 

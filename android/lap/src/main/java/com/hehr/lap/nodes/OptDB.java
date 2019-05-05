@@ -135,7 +135,6 @@ public class OptDB extends BaseNode {
             while (cursor != null
                     && cursor.getCount() > 0
                     && cursor.moveToNext()
-                    && bundle.getCache().size() <= Conf.CACHE_SIZE
             ) {
 
                 data = new Metadata();

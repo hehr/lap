@@ -1,7 +1,7 @@
 package com.hehr.lap.listener;
 
 import com.hehr.lap.Error;
-import com.hehr.lap.bean.ScannerBean;
+import com.hehr.lap.bean.AudioBean;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface ChainsListener {
       * 执行完成结果回调
       * @param list
       */
-     void onComplete(List<ScannerBean> list);
+     void onComplete(List<AudioBean> list);
 
      /**
       * 运行时错误回调

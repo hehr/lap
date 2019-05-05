@@ -100,10 +100,9 @@ public class Chains {
         }else {
 
             bundle.removeInvalid();//去除无效数据
+//            bundle.updateCache();//更新缓存
+            listener.onComplete(bundle.transToAudio(bundle.getList()));
 
-            bundle.updateCache();//更新缓存
-
-            listener.onComplete(bundle.getList());
         }
 
 

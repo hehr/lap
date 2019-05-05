@@ -98,8 +98,7 @@ public class QueryDB extends BaseNode {
 
             while (cursor != null
                     && cursor.getCount() > 0
-                    && cursor.moveToNext()
-            ) {
+                    && cursor.moveToNext()) {
 
                 data = new Metadata();
 

@@ -47,7 +47,7 @@ public class Conf {
      * 设置扫描文件条目数
      * 默认设置1000个文件数量限制
      */
-    public static int SCAN_ENTRY_NUMBER = 1000;
+    public static int SCAN_ENTRY_NUMBER = 500;
 
     public static void setEntryNumber(int number){ SCAN_ENTRY_NUMBER = number; }
 

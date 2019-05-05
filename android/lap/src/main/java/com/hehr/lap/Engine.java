@@ -1,21 +1,16 @@
 package com.hehr.lap;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.hehr.lap.bean.AudioBean;
-import com.hehr.lap.bean.Metadata;
-import com.hehr.lap.bean.ScannerBean;
 import com.hehr.lap.listener.ChainsListener;
 import com.hehr.lap.listener.InitializeListener;
 import com.hehr.lap.listener.QueryListener;
 import com.hehr.lap.listener.ScanListener;
 import com.hehr.lap.nodes.BaseNode;
-import com.hehr.lap.nodes.CreateCache;
 import com.hehr.lap.nodes.Initialize;
 import com.hehr.lap.nodes.OptDB;
 import com.hehr.lap.nodes.ParseAudio;
-import com.hehr.lap.nodes.QueryCache;
 import com.hehr.lap.nodes.QueryDB;
 import com.hehr.lap.nodes.TaskFactory;
 import com.hehr.lap.nodes.Tokenize;
@@ -24,9 +19,7 @@ import com.hehr.lap.nodes.TraverseFolder;
 import com.hehr.lap.nodes.UpdateDB;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author hehr
@@ -67,8 +60,6 @@ public class Engine {
                 .setContext(context)
                 .setTaskFactory(new TaskFactory())
                 .build());
-        //创建缓存
-        nodes.add(new CreateCache.Builder().build());
 
         Chains.getInstance().run(bundle, nodes, new InitListenerImpl());
 
@@ -83,7 +74,7 @@ public class Engine {
     private class InitListenerImpl implements ChainsListener{
 
         @Override
-        public void onComplete(List<ScannerBean> list) {
+        public void onComplete(List<AudioBean> list) {
             if(mInitializeListener!=null){
                 mInitializeListener.onInit();
             }
@@ -106,9 +97,9 @@ public class Engine {
     private class ScanListenerImpl implements ChainsListener{
 
         @Override
-        public void onComplete(List<ScannerBean> list) {
+        public void onComplete(List<AudioBean> list) {
             if(mScanListener != null){
-                mScanListener.onResult(transToAudio(list));
+                mScanListener.onResult(list);
             }
         }
 
@@ -135,8 +126,6 @@ public class Engine {
         nodes.add(new TraverseFolder.Builder()
                 .setPath(folderPath)
                 .build());
-        //缓存查询
-        nodes.add(new QueryCache.Builder().build());
         //查询数据库
         nodes.add(new QueryDB.Builder().build());
         //添加音频解析节点
@@ -164,8 +153,7 @@ public class Engine {
 
         //生成ScannerBean
         nodes.add( new Trans.Builder().setNamesList(list).build());
-        //缓存查询
-        nodes.add(new QueryCache.Builder().build());
+
         //分词
         nodes.add( new Tokenize.Builder().build());
 
@@ -173,9 +161,6 @@ public class Engine {
         Chains.getInstance().run(bundle , nodes , new ScanListenerImpl());
 
     }
-
-    //todo  dropCacheFromDB  清空数据库缓存
-    //todo  queryCacheFromMemory  查询内存缓存
 
 
     /**
@@ -214,9 +199,9 @@ public class Engine {
     private class QueryListenerImpl implements ChainsListener {
 
         @Override
-        public void onComplete(List<ScannerBean> list) {
+        public void onComplete(List<AudioBean> list) {
             if(mQueryListener != null){
-                mQueryListener.onResult(transToAudio(list));
+                mQueryListener.onResult(list);
             }
         }
 
@@ -237,15 +222,17 @@ public class Engine {
     public void setEntryNumber(int number){
         Conf.setEntryNumber(number);
     }
-    /**
-     * 设置缓存区音乐条目,
-     * 默认值 200 取值范围 0-500
-     * @param size
-     */
 
-    public void setCacheSize(int size){
-        Conf.setCacheSize(size<=0?0:size>=500?500:size);
-    }
+
+//    /**
+//     * 设置缓存区音乐条目,
+//     * 默认值 200 取值范围 0-500
+//     * @param size
+//     */
+//
+//    public void setCacheSize(int size){
+//        Conf.setCacheSize(size<=0?0:size>=500?500:size);
+//    }
 
     /**
      * 设置扫描过滤文件限制大小
@@ -289,52 +276,5 @@ public class Engine {
     public boolean isInitialized(){
         return bundle==null?false:bundle.isInitialize();
     }
-
-
-    /**
-     *
-     * scannerBean to AudioBean
-     * @param list
-     * @return
-     */
-    private List<AudioBean> transToAudio(List<ScannerBean> list) {
-
-        List<AudioBean> audioList = new ArrayList<>();
-
-        for (ScannerBean sb : list) {
-            AudioBean item = new AudioBean();
-            if (!TextUtils.isEmpty(sb.getAbsolutePath())) {
-                item.setPath(sb.getAbsolutePath());
-            } else {
-                item.setName(sb.getFileNameWithOutSuffix());
-            }
-            Set title = new HashSet();
-            Set artist = new HashSet();
-            if (sb.getMetadata().getExtra() != null
-                    && sb.getMetadata().getExtra().size() != 0) {
-                for (Metadata extraMata : sb.getMetadata().getExtra()) {
-                    if (!TextUtils.isEmpty(extraMata.getTitle())) {
-                        title.add(extraMata.getTitle());
-                    }
-                    if (!TextUtils.isEmpty(extraMata.getArtist())) {
-                        artist.add(extraMata.getArtist());
-                    }
-                }
-            } else {
-                if (!TextUtils.isEmpty(sb.getMetadata().getTitle())) {
-                    title.add(sb.getMetadata().getTitle());
-                }
-                if (!TextUtils.isEmpty(sb.getMetadata().getArtist())) {
-                    artist.add(sb.getMetadata().getArtist());
-                }
-            }
-            item.setSong(title.iterator().hasNext()? title.iterator().next().toString():"");
-            item.setSinger(artist.iterator().hasNext()? artist.iterator().next().toString():"");
-            audioList.add(item);
-        }
-
-        return audioList;
-    }
-
 
 }
