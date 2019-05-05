@@ -30,7 +30,6 @@ public class AudioBean {
     /**
      * 文件名
      */
-
     public String name;
 
 

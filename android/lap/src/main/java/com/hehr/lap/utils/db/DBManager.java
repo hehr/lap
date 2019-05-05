@@ -45,28 +45,17 @@ public class DBManager {
      * @return
      */
     public long  updateDateInTransaction(String  tableName , List<ContentValues> values ){
-
         long count = 0;
-
         try {
-
             sqLiteDatabase.beginTransaction();
-
             for (ContentValues value:values) {
                 count += sqLiteDatabase.replace( tableName ,null,value);
             }
-
             sqLiteDatabase.setTransactionSuccessful();
-
         }finally {
-
             sqLiteDatabase.endTransaction();
-
         }
-
         return count;
-
-
     }
 
 
