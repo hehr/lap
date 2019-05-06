@@ -22,7 +22,7 @@ implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
 
 ## 引入工程
 
-- 添加依赖的方式
+- 添加依赖
 
 1 在工程的根目录下的build.gradle 添加 maven { url "https://jitpack.io" }
 
