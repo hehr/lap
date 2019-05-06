@@ -5,7 +5,7 @@
 .DS_Store
 /build
 /captures
-android/gradle/
-android/lap/out/
-android/lap/tmp/
+gradle/
+lap-lib/out/
+lap-lib/tmp/
 .externalNativeBuild
