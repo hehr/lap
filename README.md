@@ -1,6 +1,6 @@
 # lap
 
-lap 是local audio parser 单词缩写，意为离线媒体解析库，可提供离线解析多媒体信息的能力。
+lap 是local audio parser缩写，意为离线媒体解析库，可提供离线解析多媒体信息的能力。
 
 
 ## 依赖
