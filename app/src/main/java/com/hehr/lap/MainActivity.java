@@ -46,9 +46,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         editText = (EditText)findViewById(R.id.editText);
 
 
-        Engine.getInstance().setEntryNumber(500);
+        Lap.getInstance().setEntryNumber(500);//设置单个目录下解析文件个数限制
 
-        Engine.getInstance().initialize(this, new InitializeListener() {
+        Lap.getInstance().initialize(this, new InitializeListener() {
             @Override
             public void onError(Error error) {
                 isInit =false;
@@ -71,10 +71,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if(v.getId() == scanDefaultPath.getId()){
             if(isInit){
-                Engine.getInstance().scan(SD_CARD_PATH , new ScanListener(){
+                Lap.getInstance().scan(SD_CARD_PATH , new ScanListener(){
 
                     @Override
                     public void onResult(List<AudioBean> list) {
+
                         Log.d(TAG , list.toString());
                     }
 
