@@ -12,7 +12,7 @@ task pack(type: Zip) {
             println "------------拷贝 aar-------------"
             delete 'tmp'
             delete 'out'
-            from 'build/outputs/aar/lap-release.aar'
+            from 'build/outputs/aar/lap-lib-release.aar'
             into 'tmp'
             rename {
                 targetName + ".aar"
