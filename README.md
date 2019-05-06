@@ -5,7 +5,7 @@ lap 是local audio parser缩写，意为离线媒体解析库，可提供离线�
 
 ## 依赖
 
-工程实现依赖 (FFmpegMediaMetadataRetriever)[https://github.com/wseemann/FFmpegMediaMetadataRetriever]
+工程实现依赖 [FFmpegMediaMetadataRetriever](https://github.com/wseemann/FFmpegMediaMetadataRetriever)
 
 故需在工程的build.gradle中添加依赖
 
