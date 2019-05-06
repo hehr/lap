@@ -26,15 +26,15 @@ import java.util.List;
  * 该版本为单线程模型，不支持多线程并发解析
  *
  */
-public class Engine {
+public class Lap {
 
-    private Engine(){}
+    private Lap(){}
 
     private static class ScannerHolder {
-        private static final Engine INSTANCE = new Engine();
+        private static final Lap INSTANCE = new Lap();
     }
 
-    public static final Engine getInstance() {
+    public static final Lap getInstance() {
         return ScannerHolder.INSTANCE;
     }
 
