@@ -25,5 +25,5 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':lap')
+    implementation project(':lap-lib')
 }
