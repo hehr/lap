@@ -6,4 +6,6 @@
 /build
 /captures
 android/gradle/
+android/lap/out/
+android/lap/tmp/
 .externalNativeBuild
