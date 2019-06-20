@@ -26,7 +26,7 @@ import wseemann.media.FFmpegMediaMetadataRetriever;
 public class Constants {
 
     public static final String [] METADATA_KEYS = {
-//            FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM,
+            FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM,
 //            FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM_ARTIST,
             FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST,
 //            FFmpegMediaMetadataRetriever.METADATA_KEY_COMMENT,

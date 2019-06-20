@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hehr.lap.bean.AudioBean;
 import com.hehr.lap.listener.InitializeListener;
+import com.hehr.lap.listener.QueryListener;
 import com.hehr.lap.listener.ScanListener;
 
 import java.util.List;
@@ -40,10 +41,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         scanPath = (Button) findViewById(R.id.button_scan_path);
-        scanDefaultPath = (Button)findViewById(R.id.button_scan_default);
-        setPath = (Button)findViewById(R.id.button_set_path);
-        resultView =(TextView) findViewById(R.id.tv);
-        editText = (EditText)findViewById(R.id.editText);
+        scanDefaultPath = (Button) findViewById(R.id.button_scan_default);
+        setPath = (Button) findViewById(R.id.button_set_path);
+        resultView = (TextView) findViewById(R.id.tv);
+        editText = (EditText) findViewById(R.id.editText);
 
 
         Lap.getInstance().setEntryNumber(500);//设置单个目录下解析文件个数限制
@@ -51,7 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Lap.getInstance().initialize(this, new InitializeListener() {
             @Override
             public void onError(Error error) {
-                isInit =false;
+                isInit = false;
             }
 
             @Override
@@ -61,6 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
 
         scanDefaultPath.setOnClickListener(this);
+        scanPath.setOnClickListener(this);
 
     }
 
@@ -69,29 +71,41 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == scanDefaultPath.getId()){
-            if(isInit){
-                Lap.getInstance().scan(SD_CARD_PATH , new ScanListener(){
+        if (v.getId() == scanDefaultPath.getId()) {
+            if (isInit) {
+                Lap.getInstance().scan(SD_CARD_PATH, new ScanListener() {
 
                     @Override
                     public void onResult(List<AudioBean> list) {
-
-                        Log.d(TAG , list.toString());
+                        Log.d(TAG, list.toString());
                     }
 
                     @Override
                     public void onError(Error error) {
-                        Log.e(TAG , error.toString());
+                        Log.e(TAG, error.toString());
                     }
                 });
-            }else {
-
             }
+        } else if (v.getId() == scanPath.getId()) {
+
+            Log.e(TAG, "hahahah");
+            Lap.getInstance().optDB("蔡健雅", "红色高跟鞋", "若你碰到他", new QueryListener() {
+                @Override
+                public void onResult(List<AudioBean> list) {
+
+                    Log.e(TAG, "list size :" + list.size());
+                    for (AudioBean b : list) {
+                        Log.e(TAG, "b:" + b.toString());
+                    }
+                }
+
+                @Override
+                public void onError(Error error) {
+                    Log.e(TAG, error.toString());
+                }
+            });
         }
     }
-
-
-
 
 
 }

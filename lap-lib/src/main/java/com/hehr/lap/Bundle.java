@@ -75,9 +75,13 @@ public class Bundle {
         return this;
     }
 
-    public boolean isInitialize() { return isInitialize; }
+    public boolean isInitialize() {
+        return isInitialize;
+    }
 
-    public void setInitialize(boolean initialize) { isInitialize = initialize; }
+    public void setInitialize(boolean initialize) {
+        isInitialize = initialize;
+    }
 
     /**
      * 当前bundle中待处理的数据
@@ -126,7 +130,7 @@ public class Bundle {
     public void removeInvalid() {
         for (Iterator<ScannerBean> it = getList().iterator(); it.hasNext(); ) {
             ScannerBean bean = it.next();
-            if (bean.getMetadata()==null
+            if (bean.getMetadata() == null
                     || bean.getMetadata().isEmpty()) {
                 it.remove();
             }
@@ -136,15 +140,15 @@ public class Bundle {
     /**
      * 销毁bundle内所有数据
      */
-    public void release(){
+    public void release() {
 
         //关闭数据库连接
-        if(getDbManager()!= null){
+        if (getDbManager() != null) {
             getDbManager().destroy();
         }
 
         //关闭线程池
-        if(getTaskFactory()!=null){
+        if (getTaskFactory() != null) {
             getTaskFactory().destroy();
         }
 
@@ -155,8 +159,8 @@ public class Bundle {
     }
 
     /**
-     *
      * scannerBean to AudioBean
+     *
      * @param list
      * @return
      */
@@ -191,8 +195,9 @@ public class Bundle {
                     artist.add(sb.getMetadata().getArtist());
                 }
             }
-            item.setSong(title.iterator().hasNext()? title.iterator().next().toString():"");
-            item.setSinger(artist.iterator().hasNext()? artist.iterator().next().toString():"");
+            item.setSong(title.iterator().hasNext() ? title.iterator().next().toString() : "");
+            item.setSinger(artist.iterator().hasNext() ? artist.iterator().next().toString() : "");
+            item.setAlbum(sb.getMetadata().getAlbum() == null ? "" : sb.getMetadata().getAlbum());
             audioList.add(item);
         }
 

@@ -2,6 +2,7 @@ package com.hehr.lap.nodes;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hehr.lap.Bundle;
 import com.hehr.lap.Error;
@@ -95,6 +96,8 @@ public class ParseAudio extends BaseNode<Bundle> {
                                     metadata.setTitle(value);
                                 } else if (FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST.equals(key)) {
                                     metadata.setArtist(value);
+                                } else if(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM.equals(key)){
+                                    metadata.setAlbum(value);
                                 }
                             }
                         }

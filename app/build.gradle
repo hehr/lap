@@ -26,9 +26,9 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.github.hehr:lap:1.0.3'
+//    implementation 'com.github.hehr:lap:1.0.3'
 
     implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
 
-//    implementation project(':lap-lib')
+    implementation project(':lap-lib')
 }

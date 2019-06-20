@@ -8,7 +8,7 @@ public class Conf {
     /**
      * 音频过滤类型
      */
-    public static HashSet AUDIO_TYPE =new HashSet(){{
+    public static HashSet AUDIO_TYPE = new HashSet() {{
         add("mp3");
         add("ogg");
         add("wav");
@@ -30,7 +30,7 @@ public class Conf {
      */
     public static int AUDIO_SIZE_LIMIT = 1024;
 
-    public static void setAudioSizeLimit(int limit){
+    public static void setAudioSizeLimit(int limit) {
         AUDIO_SIZE_LIMIT = limit;
     }
 
@@ -39,7 +39,7 @@ public class Conf {
      */
     public static int CACHE_SIZE = 200;
 
-    public static void setCacheSize(int size){
+    public static void setCacheSize(int size) {
         CACHE_SIZE = size;
     }
 
@@ -49,7 +49,9 @@ public class Conf {
      */
     public static int SCAN_ENTRY_NUMBER = 500;
 
-    public static void setEntryNumber(int number){ SCAN_ENTRY_NUMBER = number; }
+    public static void setEntryNumber(int number) {
+        SCAN_ENTRY_NUMBER = number;
+    }
 
     /**
      * 数据库名称
@@ -65,29 +67,42 @@ public class Conf {
     /**
      * 数据库信息相关变量
      */
-    public static class ScannerDB{
+    public static class ScannerDB {
 
         /**
          * metadata表
          */
         public static final String TABLE_METADATA_NAME = "metadata";
 
+        /**
+         * 文件名
+         */
         public static final String METADATA_COLUMN_FILE_NAME = "file_name";
 
+        /**
+         * 歌手名
+         */
         public static final String METADATA_COLUMN_ARTIST = "artist";
 
+        /**
+         * 歌曲名
+         */
         public static final String METADATA_COLUMN_TITLE = "title";
+        /**
+         * 专辑名
+         */
+        public static final String METADATA_COLUMN_ALBUM = "album";
 
         /**
-         * singer 表
+         * 歌手名
          */
         public static final String TABLE_SINGER_NAME = "singer";
 
+        /**
+         * 文件名
+         */
         public static final String SINGER_COLUMN_NAME = "name";
     }
-
-
-
 
 
 }
