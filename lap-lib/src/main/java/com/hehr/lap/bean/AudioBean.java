@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 /**
  * @author hehr
- *
  */
 
 public class AudioBean {
@@ -31,6 +30,11 @@ public class AudioBean {
      * 文件名
      */
     public String name;
+
+    /**
+     * 专辑名
+     */
+    public String album;
 
 
     public String getName() {
@@ -72,6 +76,13 @@ public class AudioBean {
         this.song = song;
     }
 
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
 
     @Override
     public String toString() {
@@ -80,25 +91,26 @@ public class AudioBean {
                 ", song='" + song + '\'' +
                 ", path='" + path + '\'' +
                 ", name='" + name + '\'' +
+                ", album='" + album + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object obj) {
 
-        if(!(obj instanceof AudioBean)){
+        if (!(obj instanceof AudioBean)) {
             return false;
         }
 
         AudioBean ab = (AudioBean) obj;
 
-        if(TextUtils.equals(ab.getSong(),getSong()) && TextUtils.equals(ab.getSinger(),getSinger())){
-            if(!TextUtils.isEmpty(ab.getPath())){
-                return TextUtils.equals(ab.getName(),getName())?true:false;
-            }else if(!TextUtils.isEmpty(ab.getName())){
-                return TextUtils.equals(ab.getPath(),getPath())?true:false;
+        if (TextUtils.equals(ab.getSong(), getSong()) && TextUtils.equals(ab.getSinger(), getSinger())) {
+            if (!TextUtils.isEmpty(ab.getPath())) {
+                return TextUtils.equals(ab.getName(), getName()) ? true : false;
+            } else if (!TextUtils.isEmpty(ab.getName())) {
+                return TextUtils.equals(ab.getPath(), getPath()) ? true : false;
             }
-        }else {
+        } else {
             return false;
         }
 

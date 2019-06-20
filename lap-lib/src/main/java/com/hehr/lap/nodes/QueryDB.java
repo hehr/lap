@@ -64,6 +64,8 @@ public class QueryDB extends BaseNode {
                     + Conf.ScannerDB.METADATA_COLUMN_TITLE
                     + ", "
                     + Conf.ScannerDB.METADATA_COLUMN_ARTIST
+                    + ","
+                    + Conf.ScannerDB.METADATA_COLUMN_ALBUM
                     + " from "
                     + Conf.ScannerDB.TABLE_METADATA_NAME
                     + " where "
@@ -99,14 +101,11 @@ public class QueryDB extends BaseNode {
             while (cursor != null
                     && cursor.getCount() > 0
                     && cursor.moveToNext()) {
-
                 data = new Metadata();
-
                 String absolutePath = cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_FILE_NAME));
-
                 data.setArtist(cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_ARTIST)));
                 data.setTitle(cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_TITLE)));
-
+                data.setAlbum(cursor.getString(cursor.getColumnIndex(Conf.ScannerDB.METADATA_COLUMN_ALBUM)));
                 for (ScannerBean bean : bundle.getList()) {
                     if (!bean.isEffect() && bean.getAbsolutePath().equals(absolutePath)) {
                         bean.setMetadata(data);

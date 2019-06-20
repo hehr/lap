@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 更新数据库节点
+ *
  * @author hehr
  */
 public class UpdateDB extends BaseNode {
@@ -63,16 +64,17 @@ public class UpdateDB extends BaseNode {
 
             List<AudioBean> lst = bundle.transToAudio(bundle.getList());
 
+            ContentValues value;
+
             for (AudioBean bean : lst) {
 
                 //数据库中只保存含有绝对路径且被成功解析过的数据
-                if (TextUtils.isEmpty(bean.getPath()))  continue;
-
-                ContentValues value = new ContentValues();
-
+                if (TextUtils.isEmpty(bean.getPath())) continue;
+                value = new ContentValues();
                 value.put(Conf.ScannerDB.METADATA_COLUMN_FILE_NAME, bean.getPath());
                 value.put(Conf.ScannerDB.METADATA_COLUMN_ARTIST, bean.getSinger());
                 value.put(Conf.ScannerDB.METADATA_COLUMN_TITLE, bean.getSong());
+                value.put(Conf.ScannerDB.METADATA_COLUMN_ALBUM, bean.getAlbum());
 
                 values.add(value);
 

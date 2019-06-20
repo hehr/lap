@@ -42,7 +42,6 @@ allprojects {
 implementation 'com.github.hehr:lap:1.0.3'
 ```
 
-
 - aar或者jar
 
 1 手动执行lap-lib目录下的pack.sh 脚本

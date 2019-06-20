@@ -11,6 +11,8 @@ public class Metadata extends BaseBean<Metadata> {
 
     private String title;
 
+    private String album;
+
     private List<Metadata> extra;
 
     /**
@@ -25,24 +27,39 @@ public class Metadata extends BaseBean<Metadata> {
     public void setExtra(List<Metadata> extra) {
         this.extra = extra;
     }
+
     public String getArtist() {
         return artist;
     }
+
     public void setArtist(String artist) {
         this.artist = artist;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
     @Override
     public String toString() {
-        return "artist : " + this.getArtist()
-                + " title : " + this.getTitle()
-                + " extra : " + (getExtra() == null ? "" : getExtra().toString());
+        return "Metadata{" +
+                "artist='" + artist + '\'' +
+                ", title='" + title + '\'' +
+                ", album='" + album + '\'' +
+                ", extra=" + extra +
+                '}';
     }
 
     @Override
@@ -54,12 +71,11 @@ public class Metadata extends BaseBean<Metadata> {
     /**
      * 是否已成功解析过的
      * 只有完整具备歌手歌曲名或者含有extra字段了才认为是已完整解析过了
-     *
      */
-    public boolean isParsed(){
+    public boolean isParsed() {
         return !TextUtils.isEmpty(this.getTitle())
-                &&!TextUtils.isEmpty(getArtist())
-                ||(getExtra()!= null && getExtra().size()!=0);
+                && !TextUtils.isEmpty(getArtist())
+                || (getExtra() != null && getExtra().size() != 0);
     }
 
     @Override

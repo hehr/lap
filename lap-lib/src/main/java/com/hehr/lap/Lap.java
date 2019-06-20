@@ -24,11 +24,11 @@ import java.util.List;
 /**
  * @author hehr
  * 该版本为单线程模型，不支持多线程并发解析
- *
  */
 public class Lap {
 
-    private Lap(){}
+    private Lap() {
+    }
 
     private static class ScannerHolder {
         private static final Lap INSTANCE = new Lap();
@@ -38,14 +38,15 @@ public class Lap {
         return ScannerHolder.INSTANCE;
     }
 
-    private volatile Bundle bundle ;
+    private Bundle bundle;
 
     /**
      * 模块初始化
+     *
      * @param context
      * @param listener
      */
-    public void initialize(Context context , InitializeListener listener){
+    public void initialize(Context context, InitializeListener listener) {
 
         mInitializeListener = listener;
 
@@ -69,20 +70,19 @@ public class Lap {
 
     /**
      * 引起初始化监听器实现类
-     *
      */
-    private class InitListenerImpl implements ChainsListener{
+    private class InitListenerImpl implements ChainsListener {
 
         @Override
         public void onComplete(List<AudioBean> list) {
-            if(mInitializeListener!=null){
+            if (mInitializeListener != null) {
                 mInitializeListener.onInit();
             }
         }
 
         @Override
         public void onError(Error e) {
-            if(mInitializeListener!=null){
+            if (mInitializeListener != null) {
                 mInitializeListener.onError(e);
             }
         }
@@ -92,20 +92,19 @@ public class Lap {
 
     /**
      * 引擎扫描结果监听器实现类
-     *
      */
-    private class ScanListenerImpl implements ChainsListener{
+    private class ScanListenerImpl implements ChainsListener {
 
         @Override
         public void onComplete(List<AudioBean> list) {
-            if(mScanListener != null){
+            if (mScanListener != null) {
                 mScanListener.onResult(list);
             }
         }
 
         @Override
         public void onError(Error e) {
-            if(mScanListener!=null){
+            if (mScanListener != null) {
                 mScanListener.onError(e);
             }
         }
@@ -113,10 +112,11 @@ public class Lap {
 
     /**
      * scan & parse files by path
+     *
      * @param folderPath
      * @param listener
      */
-    public void scan(String folderPath , ScanListener listener){
+    public void scan(String folderPath, ScanListener listener) {
 
         mScanListener = listener;
 
@@ -136,45 +136,46 @@ public class Lap {
         nodes.add(new UpdateDB.Builder().build());
 
         //2、设置回调，并启动责任链
-        Chains.getInstance().run(bundle , nodes , new ScanListenerImpl());
+        Chains.getInstance().run(bundle, nodes, new ScanListenerImpl());
 
     }
 
     /**
      * scan & parse files by name
+     *
      * @param list
      * @param listener
      */
-    public void scan(List<String> list ,ScanListener listener){
+    public void scan(List<String> list, ScanListener listener) {
 
         mScanListener = listener;
 
         List<BaseNode> nodes = new ArrayList<>();
 
         //生成ScannerBean
-        nodes.add( new Trans.Builder().setNamesList(list).build());
+        nodes.add(new Trans.Builder().setNamesList(list).build());
 
         //分词
-        nodes.add( new Tokenize.Builder().build());
+        nodes.add(new Tokenize.Builder().build());
 
         //2、设置回调，并启动责任链
-        Chains.getInstance().run(bundle , nodes , new ScanListenerImpl());
+        Chains.getInstance().run(bundle, nodes, new ScanListenerImpl());
 
     }
 
 
     /**
      * 从数据库中获取已经解析过的全部媒体信息
-     * @param isDesc 是否降序查询，默认true
-     * @param limit 查询最大条目数限制,0<limit<1000
      *
+     * @param isDesc 是否降序查询，默认true
+     * @param limit  查询最大条目数限制,0<limit<1000
      */
 
-    public void optDB(int limit, boolean isDesc, QueryListener listener){
+    public void optDB(int limit, boolean isDesc, QueryListener listener) {
 
         mQueryListener = listener;
 
-        limit = limit <= 0 ? 0 : limit>1000?1000: limit;
+        limit = limit <= 0 ? 0 : limit > 500 ? 500 : limit;
 
         List<BaseNode> nodes = new ArrayList<>();
         nodes.add(new OptDB.Builder()
@@ -182,32 +183,85 @@ public class Lap {
                 .setLimit(limit)
                 .build());
 
-        Chains.getInstance().run(bundle , nodes , new QueryListenerImpl());
+        Chains.getInstance().run(bundle, nodes, new QueryListenerImpl());
 
     }
 
     /**
-     * 查询数据监听器
+     * 检索歌曲信息
      *
+     * @param singer
+     * @param song
+     * @param album
+     * @param listener
+     */
+    public void optDB(String singer, String song, String album, QueryListener listener) {
+
+        mQueryListener = listener;
+
+        List<BaseNode> nodes = new ArrayList<>();
+        nodes.add(new OptDB.Builder()
+                .setDesc(true)
+                .setLimit(500)
+                .setAlbum(album)
+                .setSinger(singer)
+                .setSong(song)
+                .build());
+
+        Chains.getInstance().run(bundle, nodes, new QueryListenerImpl());
+    }
+
+    /**
+     * 检索歌手名
+     *
+     * @param singer   歌手名
+     * @param listener
+     */
+    public void optSinger(String singer, QueryListener listener) {
+        optDB(singer, null, null, listener);
+    }
+
+    /**
+     * 检索歌曲名
+     *
+     * @param song
+     * @param listener
+     */
+    public void optSong(String song, QueryListener listener) {
+        optDB(null, song, null, listener);
+    }
+
+    /**
+     * 检索专辑名
+     *
+     * @param album
+     * @param listener
+     */
+    public void optAlbum(String album, QueryListener listener) {
+        optDB(null, null, album, listener);
+    }
+
+
+    /**
+     * 查询数据监听器
      */
     private QueryListener mQueryListener;
 
     /**
      * 数据库查询监听器实现类
-     *
      */
     private class QueryListenerImpl implements ChainsListener {
 
         @Override
         public void onComplete(List<AudioBean> list) {
-            if(mQueryListener != null){
+            if (mQueryListener != null) {
                 mQueryListener.onResult(list);
             }
         }
 
         @Override
         public void onError(Error e) {
-            if(mQueryListener != null){
+            if (mQueryListener != null) {
                 mQueryListener.onError(e);
             }
         }
@@ -216,10 +270,11 @@ public class Lap {
 
     /**
      * 设置扫描条目限制
+     *
      * @param number
      */
 
-    public void setEntryNumber(int number){
+    public void setEntryNumber(int number) {
         Conf.setEntryNumber(number);
     }
 
@@ -236,10 +291,9 @@ public class Lap {
 
     /**
      * 设置扫描过滤文件限制大小
-     *
      */
 
-    public void setAudioSize(int limit){
+    public void setAudioSize(int limit) {
         Conf.setAudioSizeLimit(limit);
     }
 
@@ -247,7 +301,7 @@ public class Lap {
      * 添加滤音乐文件类型
      */
 
-    public void addAudioType(String type){
+    public void addAudioType(String type) {
         Conf.AUDIO_TYPE.add(type);
     }
 
@@ -256,9 +310,9 @@ public class Lap {
      * 在此方法中销毁线程池资源和数据库连接资源，
      * 此方法调用后必须重新调用 Initialize
      */
-    public void release(){
+    public void release() {
 
-        if(bundle != null){
+        if (bundle != null) {
             bundle.release();
             bundle = null;
         }
@@ -270,11 +324,12 @@ public class Lap {
 
     /**
      * 模块是否初始化完成
+     *
      * @return
      */
 
-    public boolean isInitialized(){
-        return bundle==null?false:bundle.isInitialize();
+    public boolean isInitialized() {
+        return bundle == null ? false : bundle.isInitialize();
     }
 
 }
